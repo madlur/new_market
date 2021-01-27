@@ -50,4 +50,38 @@ public class Cart {
             totalPrice += o.getPrice();
         }
     }
+
+    public void incrementCartItem(String productTitle) {
+
+        for (OrderItem o : items) {
+            if (o.getProduct().getTitle().equals(productTitle)) {
+                o.incrementQuantity();
+                recalculate();
+            }
+        }
+    }
+
+    public void decrementCartItem(String productTitle) {
+        System.out.println(productTitle);
+        for (OrderItem o : items) {
+            if (o.getProduct().getTitle().equals(productTitle) && o.getQuantity() > 1) {
+                o.decrementQuantity();
+                recalculate();
+            } else if (o.getQuantity() == 1) {
+                /**
+                 * При декременте OrderItem, если его количество == 1 возникает ошибка 2021-01-27 18:16:05.297
+                 * ERROR 19304 --- [nio-8189-exec-2] o.a.c.c.C.[.[.[.[dispatcherServlet]
+                 * : Servlet.service() for servlet [dispatcherServlet] in context with path [/happy]
+                 * threw exception [Request processing failed; nested exception is java.util.
+                 * ConcurrentModificationException] with root cause
+                 *
+                 * По двойному клику по форме на фронте продукт исчезает из корзины, но баг сам устранить не смог
+                 * м.б. это как то связано с операциями над Листом OrderItems...
+                 *
+                 * */
+                items.remove(o);
+                recalculate();
+            }
+        }
+    }
 }

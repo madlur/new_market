@@ -28,4 +28,16 @@ public class CartController {
     public void clearCart() {
         cart.clear();
     }
+
+
+    @GetMapping("/increment/{productTitle}")
+    public void incrementCartItem(@PathVariable String productTitle) {
+        cart.incrementCartItem(productTitle);
+    }
+
+    @GetMapping("/decrement/{productTitle}")
+    public void decrementCartItem(@PathVariable String productTitle) {
+        cart.decrementCartItem(productTitle);
+    }
+
 }

@@ -37,7 +37,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         });
     };
 
-    $scope.generatePagesIndexes = function(startPage, endPage) {
+    $scope.generatePagesIndexes = function (startPage, endPage) {
         let arr = [];
         for (let i = startPage; i < endPage + 1; i++) {
             arr.push(i);
@@ -66,6 +66,20 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
                 $scope.showCart();
             });
     }
+    //
+    $scope.incrementCartItem = function (productTitle) {
+        $http.get(contextPath + '/cart/increment/' + productTitle)
+            .then(function (response) {
+                $scope.showCart();
+            });
+    };
+
+    $scope.decrementCartItem = function (productTitle) {
+        $http.get(contextPath + '/cart/decrement/' + productTitle)
+            .then(function (response) {
+                $scope.showCart();
+            });
+    };
 
     $scope.clearCart = function () {
         $http.get(contextPath + '/cart/clear')

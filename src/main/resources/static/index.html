@@ -68,7 +68,8 @@
                 <a class="page-link" ng-click="fillTable(ProductsPage.number)">Пред.</a>
             </li>
 
-            <li ng-class="ProductsPage.number == pageIndex - 1 ? 'page-item active' : 'page-item'" ng-repeat="pageIndex in PaginationArray">
+            <li ng-class="ProductsPage.number == pageIndex - 1 ? 'page-item active' : 'page-item'"
+                ng-repeat="pageIndex in PaginationArray">
                 <a class="page-link" ng-click="fillTable(pageIndex)">{{pageIndex}}</a>
             </li>
 
@@ -90,7 +91,15 @@
         <tbody>
         <tr ng-repeat="oi in Cart.items">
             <td>{{oi.productTitle}}</td>
-            <td>{{oi.quantity}}</td>
+            <td width="150">
+                <div class="input-group">
+                    <button class="btn btn-danger" type="button" ng-click="decrementCartItem(oi.productTitle)"><i>-</i>
+                    </button>
+                    <input type="text" class="form-control" placeholder="0" aria-label="" value="{{oi.quantity}}">
+                    <button class="btn btn-success" type="button" ng-click="incrementCartItem(oi.productTitle)"><i>+</i>
+                    </button>
+                </div>
+            </td>
             <td>{{oi.quantity + ' x ' + oi.pricePerProduct + ' = ' + oi.price}}</td>
         </tr>
         <tr>
