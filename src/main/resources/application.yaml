@@ -2,12 +2,13 @@ server:
   port: 8189
   servlet:
     context-path: /happy
+
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:mydatabase;MODE=PostgreSQL
-    username: sa
-    password:
+    url: jdbc:h2:mem:mydatabase;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;MODE=MYSQL
+    username: a
+    password: a
   jpa:
     show-sql: true
     properties:
