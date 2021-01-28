@@ -75,6 +75,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     };
 
     $scope.decrementCartItem = function (productTitle) {
+        console.log(productTitle)
         $http.get(contextPath + '/cart/decrement/' + productTitle)
             .then(function (response) {
                 $scope.showCart();
