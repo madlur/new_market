@@ -84,8 +84,9 @@ public class Cart {
                  * Todo: Насколько правильно решать таким образом -> new CopyOnWriteArrayList<>(); ?
                  *
                  * */
-                items.removeIf(p -> o.getProduct().getTitle().equals(productTitle));
+                items.remove(o);
                 recalculate();
+                break;
             }
         }
     }
