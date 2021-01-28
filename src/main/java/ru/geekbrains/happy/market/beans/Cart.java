@@ -10,7 +10,9 @@ import ru.geekbrains.happy.market.services.ProductService;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class Cart {
 
     @PostConstruct
     public void init() {
-        this.items = new ArrayList<>();
+        this.items = new CopyOnWriteArrayList<>();
     }
 
     public void addToCart(Long id) {
@@ -66,21 +68,23 @@ public class Cart {
             if (o.getProduct().getTitle().equals(productTitle) && o.getQuantity() > 1) {
                 o.decrementQuantity();
                 recalculate();
-            } else if (o.getProduct().getTitle().equals(productTitle) && o.getQuantity() == 1) {
+                break;
+            }
+
+            if (o.getProduct().getTitle().equals(productTitle) && o.getQuantity() == 1) {
                 /**
-                 * При декременте OrderItem, если его количество == 1 возникает ошибка 2021-01-27 18:16:05.297
-                 * ERROR 19304 --- [nio-8189-exec-2] o.a.c.c.C.[.[.[.[dispatcherServlet]
-                 * : Servlet.service() for servlet [dispatcherServlet] in context with path [/happy]
-                 * threw exception [Request processing failed; nested exception is java.util.
-                 * ConcurrentModificationException] with root cause
+                 * При декременте OrderItem, если его количество == 1 возникает ошибка
+                 * java.util.ConcurrentModificationException: null
+                 * 	at java.base/java.util.ArrayList$Itr.checkForComodification(ArrayList.java:1012) ~[na:na]
+                 * 	at java.base/java.util.ArrayList$Itr.next(ArrayList.java:966) ~[na:na]
+                 * 	at ru.geekbrains.happy.market.beans.Cart.decrementCartItem(Cart.java:71) ~[classes/:na]
                  *
-                 * По двойному клику по форме на фронте продукт исчезает из корзины, но баг сам устранить не смог
-                 * м.б. это как то связано с операциями над Листом OrderItems...
                  *
-                 * скорее всего из-за удаления элемента листа в цикле. Todo: Надо добавить итератор или найти другое решение
+                 * скорее всего из-за удаления элемента листа в цикле.
+                 * Todo: Насколько правильно решать таким образом -> new CopyOnWriteArrayList<>(); ?
                  *
                  * */
-                items.remove(o);
+                items.removeIf(p -> o.getProduct().getTitle().equals(productTitle));
                 recalculate();
             }
         }
